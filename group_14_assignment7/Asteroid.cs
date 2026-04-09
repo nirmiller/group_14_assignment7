@@ -151,22 +151,26 @@ public class Asteroid
             Matrix.CreateRotationZ(_bodyRotation) *
             Matrix.CreateTranslation(_bodyPosition.X, _bodyPosition.Y, 0f);
 
-        Vector2 tailBaseOrigin = new Vector2(_tailTexture.Width, _tailTexture.Height / 2f);
-        Vector2 socketLocal = new Vector2(-_bodyTexture.Width / 20f, _bodyTexture.Height / 5f);
-        float tailArtOffset = -MathHelper.Pi / 3;
 
-        Matrix M_childLocal =
-            Matrix.CreateTranslation(-tailBaseOrigin.X, -tailBaseOrigin.Y, 0f) *
-            Matrix.CreateScale(_size / 2f, _size / 2f, 1f) *
-            Matrix.CreateRotationZ(tailArtOffset + _tailWiggle) *
-            Matrix.CreateTranslation(socketLocal.X, socketLocal.Y, 0f);
+        /*
+            Vector2 tailBaseOrigin = new Vector2(_tailTexture.Width, _tailTexture.Height / 2f);
+            Vector2 socketLocal = new Vector2(-_bodyTexture.Width / 20f, _bodyTexture.Height / 5f);
+            float tailArtOffset = -MathHelper.Pi / 3;
 
-        Matrix M_childWorld = M_childLocal * M_parent;
+            Matrix M_childLocal =
+                Matrix.CreateTranslation(-tailBaseOrigin.X, -tailBaseOrigin.Y, 0f) *
+                Matrix.CreateScale(_size / 2f, _size / 2f, 1f) *
+                Matrix.CreateRotationZ(tailArtOffset + _tailWiggle) *
+                Matrix.CreateTranslation(socketLocal.X, socketLocal.Y, 0f);
 
-        spriteBatch.Begin(transformMatrix: M_childWorld);
-        spriteBatch.Draw(_tailTexture, Vector2.Zero, Color.White);
-        spriteBatch.End();
+            Matrix M_childWorld = M_childLocal * M_parent;
 
+            spriteBatch.Begin(transformMatrix: M_childWorld);
+            spriteBatch.Draw(_tailTexture, Vector2.Zero, Color.White);
+            spriteBatch.End();
+
+        */
+            
         Matrix M_body =
             Matrix.CreateTranslation(-parentOrigin.X, -parentOrigin.Y, 0f) *
             Matrix.CreateScale(_size, _size, 1f) *

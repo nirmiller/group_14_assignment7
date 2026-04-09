@@ -84,7 +84,7 @@ public class AsteroidsSpawn
             Texture2D chosenBodyTexture = asteroidTextures[index];
             Texture2D chosenTailTexture = tailTextures[index];
 
-            int sizeInt = Random.Shared.Next(1, 5);
+            int sizeInt = Random.Shared.Next(1, 20);
 
             Vector2 spawn = GetRandomBorderPosition();
             Vector2 target = new Vector2(Random.Shared.Next(100, 900), Random.Shared.Next(100, 700));
