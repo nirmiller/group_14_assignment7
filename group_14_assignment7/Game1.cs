@@ -36,14 +36,14 @@ public class Game1 : Game
     {
         asteroidBodies = new Texture2D[]
         {
-            Content.Load<Texture2D>("meteor_body"),
-            Content.Load<Texture2D>("comet_body")
+            Content.Load<Texture2D>("imgs/meteor_body"),
+            Content.Load<Texture2D>("imgs/comet_body")
         };
 
         asteroidTails = new Texture2D[]
         {
-            Content.Load<Texture2D>("meteor_tail"),
-            Content.Load<Texture2D>("comet_tail")
+            Content.Load<Texture2D>("imgs/meteor_tail"),
+            Content.Load<Texture2D>("imgs/comet_tail")
         };
 
         asteroidSpawner = new AsteroidsSpawn(asteroidBodies, asteroidTails);
@@ -57,8 +57,8 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-
-        // TODO: Add your update logic here
+        
+        asteroidSpawner.beginAsteroids(gameTime);
 
         base.Update(gameTime);
     }
@@ -67,7 +67,7 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.Black);
 
-        // TODO: Add your drawing code here
+        asteroidSpawner.DrawAsteroids(_spriteBatch);
 
         base.Draw(gameTime);
     }

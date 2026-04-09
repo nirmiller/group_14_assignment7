@@ -18,12 +18,13 @@ public class AsteroidsSpawn
     public bool stopGame;
 
     private float totalTime;
+
     public AsteroidsSpawn(Texture2D[] _asteroidTextures, Texture2D[] _tailTextures)
     {
         asteroids = new Queue<Asteroid>();
         asteroidTextures = _asteroidTextures;
         tailTextures = _tailTextures;
-        stopGame =  false;
+        stopGame = false;
         totalTime = 0;
     }
 
@@ -31,6 +32,7 @@ public class AsteroidsSpawn
     {
         stopGame = true;
     }
+
     public void beginAsteroids(GameTime gametime)
     {
         if (stopGame)
@@ -38,11 +40,6 @@ public class AsteroidsSpawn
 
         totalTime += (float)gametime.ElapsedGameTime.TotalSeconds;
         int difficulty = Math.Clamp((int)totalTime, 1, 10);
-
-        while (asteroids.Count < difficulty)
-        {
-            spawnRandom(difficulty);
-        }
 
         int currentCount = asteroids.Count;
 
@@ -62,16 +59,17 @@ public class AsteroidsSpawn
             spawnRandom(difficulty);
         }
     }
+
+    public void DrawAsteroids(SpriteBatch spriteBatch)
+    {
+        foreach (Asteroid asteroid in asteroids)
+        {
+            asteroid.Draw(spriteBatch);
+        }
+    }
+
     public void ResetAll()
     {
-        int count = asteroids.Count;
-
-        for (int i = 0; i < count; i++)
-        {
-            Asteroid asteroid = asteroids.Dequeue();
-            asteroid.ResetAnimation();
-        }
-
         asteroids.Clear();
         totalTime = 0f;
         stopGame = false;
@@ -79,14 +77,15 @@ public class AsteroidsSpawn
 
     public void spawnRandom(int difficulty)
     {
-        if (asteroids.Count < difficulty)
+        if (asteroids.Count < difficulty % 10)
         {
             int index = Random.Shared.Next(asteroidTextures.Length);
-            int sizeInt = Random.Shared.Next(tailTextures.Length);
 
             Texture2D chosenBodyTexture = asteroidTextures[index];
-            Texture2D chosenTailTexture = tailTextures[sizeInt];
-            
+            Texture2D chosenTailTexture = tailTextures[index];
+
+            int sizeInt = Random.Shared.Next(1, difficulty % 10);
+
             Vector2 spawn = GetRandomBorderPosition();
             Vector2 target = new Vector2(Random.Shared.Next(100, 900), Random.Shared.Next(100, 700));
             bool curved = Random.Shared.Next(2) == 0;
@@ -94,7 +93,7 @@ public class AsteroidsSpawn
             asteroids.Enqueue(new Asteroid(
                 chosenBodyTexture,
                 chosenTailTexture,
-                0.3f + sizeInt * 0.1f,
+                1.3f + sizeInt * 0.1f,
                 spawn,
                 100f,
                 target,
@@ -109,29 +108,17 @@ public class AsteroidsSpawn
 
         switch (side)
         {
-            case 0: // left
-                return new Vector2(
-                    -spawnPadding,
-                    Random.Shared.Next(0, screenHeight)
-                );
+            case 0:
+                return new Vector2(-spawnPadding, Random.Shared.Next(0, screenHeight));
 
-            case 1: // right
-                return new Vector2(
-                    screenWidth + spawnPadding,
-                    Random.Shared.Next(0, screenHeight)
-                );
+            case 1:
+                return new Vector2(screenWidth + spawnPadding, Random.Shared.Next(0, screenHeight));
 
-            case 2: // top
-                return new Vector2(
-                    Random.Shared.Next(0, screenWidth),
-                    -spawnPadding
-                );
+            case 2:
+                return new Vector2(Random.Shared.Next(0, screenWidth), -spawnPadding);
 
-            default: // bottom
-                return new Vector2(
-                    Random.Shared.Next(0, screenWidth),
-                    screenHeight + spawnPadding
-                );
+            default:
+                return new Vector2(Random.Shared.Next(0, screenWidth), screenHeight + spawnPadding);
         }
     }
 }
