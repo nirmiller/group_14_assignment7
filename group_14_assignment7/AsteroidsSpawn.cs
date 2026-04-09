@@ -101,6 +101,7 @@ public class AsteroidsSpawn
             ));
         }
     }
+    
 
     private Vector2 GetRandomBorderPosition()
     {

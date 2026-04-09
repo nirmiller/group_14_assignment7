@@ -8,7 +8,7 @@ public class Asteroid
 {
     private Texture2D _bodyTexture;
     private Texture2D _tailTexture;
-
+    public float radius;
     private Vector2 _bodyPosition;
     private float _bodyRotation;
     private float _size;
@@ -34,8 +34,12 @@ public class Asteroid
 
     public Asteroid(Texture2D bodyTexture, Texture2D tailTexture, float size, Vector2 bodyPosition, float _score, Vector2 endPosition, bool useRandomTrajectory)
     {
+        
         _bodyTexture = bodyTexture;
         _tailTexture = tailTexture;
+        
+        
+       
         _size = size;
         _startSize = size;
         _t = 0f;
@@ -58,6 +62,7 @@ public class Asteroid
         _curveFrequency = Random.Shared.Next(10, 20) / 10f;
 
         _bodyRotation = (float)Math.Atan2(_dir.Y, _dir.X);
+        radius = (_bodyTexture.Width * size) / 2f;
     }
 
     public void ResetAnimation()
@@ -80,6 +85,12 @@ public class Asteroid
         _curveFrequency = Random.Shared.Next(10, 20) / 10f;
 
         _bodyRotation = (float)Math.Atan2(_dir.Y, _dir.X);
+    }
+    
+    public bool IsColliding(Vector2 position, float otherRadius)
+    {
+        float r = this.radius + otherRadius;
+        return Vector2.DistanceSquared(this._bodyPosition, position) <= r * r;
     }
 
     public void SetPath(Vector2 start, Vector2 end, bool useRandomTrajectory)
@@ -166,4 +177,7 @@ public class Asteroid
         spriteBatch.Draw(_bodyTexture, Vector2.Zero, Color.White);
         spriteBatch.End();
     }
+
+
+    
 }
