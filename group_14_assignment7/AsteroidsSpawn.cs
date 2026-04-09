@@ -39,14 +39,14 @@ public class AsteroidsSpawn
             return;
 
         totalTime += (float)gametime.ElapsedGameTime.TotalSeconds;
-        int difficulty = Math.Clamp((int)totalTime, 1, 10);
+        int difficulty = Math.Clamp((int)totalTime, 1, 7);
 
         int currentCount = asteroids.Count;
 
         for (int i = 0; i < currentCount; i++)
         {
             Asteroid asteroid = asteroids.Dequeue();
-            asteroid.Animate(gametime, 6f);
+            asteroid.Animate(gametime);
 
             if (asteroid.isAlive)
             {
@@ -77,14 +77,14 @@ public class AsteroidsSpawn
 
     public void spawnRandom(int difficulty)
     {
-        if (asteroids.Count < difficulty % 10)
+        if (asteroids.Count < difficulty)
         {
             int index = Random.Shared.Next(asteroidTextures.Length);
 
             Texture2D chosenBodyTexture = asteroidTextures[index];
             Texture2D chosenTailTexture = tailTextures[index];
 
-            int sizeInt = Random.Shared.Next(1, difficulty % 10);
+            int sizeInt = Random.Shared.Next(1, 5);
 
             Vector2 spawn = GetRandomBorderPosition();
             Vector2 target = new Vector2(Random.Shared.Next(100, 900), Random.Shared.Next(100, 700));
@@ -93,9 +93,9 @@ public class AsteroidsSpawn
             asteroids.Enqueue(new Asteroid(
                 chosenBodyTexture,
                 chosenTailTexture,
-                1.3f + sizeInt * 0.1f,
+                    1f + sizeInt * 0.3f,
                 spawn,
-                100f,
+                100f/sizeInt,
                 target,
                 curved
             ));
