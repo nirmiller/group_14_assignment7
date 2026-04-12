@@ -13,14 +13,19 @@ public class Game1 : Game
     // background 
     private Texture2D _background; 
     
+    // screen info 
+    private float _screenWidth = 1000;
+    private float _screenHeight = 800;
+    
     // astroids 
     private AsteroidsSpawn asteroidSpawner;
     Texture2D[] asteroidBodies;
     Texture2D[] asteroidTails;
     
-    // spaceship 
+    // ship 
     private Texture2D _ship;
     private Texture2D _shot;
+    private Spaceship _spaceship;
     
     // gui
 
@@ -62,13 +67,18 @@ public class Game1 : Game
         asteroidSpawner = new AsteroidsSpawn(asteroidBodies, asteroidTails);
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        // spaceship 
+        // ship 
         _ship = Content.Load<Texture2D>("imgs/rocket");
         _shot = Content.Load<Texture2D>("imgs/shot");
-    
-    
-        // gui
+        _spaceship = new Spaceship(screenWidth: _screenWidth,
+            screenHeight: _screenHeight,
+            spaceshipTexture: _ship,
+            shipSpeed: 1f,
+            shot: _shot,
+            shotSpeed: 2f);
         
+        // gui
+
     }
 
     protected override void Update(GameTime gameTime)
@@ -80,7 +90,7 @@ public class Game1 : Game
         // astroid
         asteroidSpawner.beginAsteroids(gameTime);
         
-        // spaceship 
+        // ship 
     
     
         // gui
@@ -102,7 +112,8 @@ public class Game1 : Game
         // astroid 
         asteroidSpawner.DrawAsteroids(_spriteBatch);
         
-        // spaceship 
+        // ship
+        _spaceship.Draw(_spriteBatch);
     
     
         // gui
