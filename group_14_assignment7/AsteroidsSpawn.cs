@@ -39,7 +39,8 @@ public class AsteroidsSpawn
             return;
 
         totalTime += (float)gametime.ElapsedGameTime.TotalSeconds;
-        int difficulty = Math.Clamp((int)totalTime, 1, 7);
+        int difficulty = Math.Clamp((int)totalTime, 1, 7);        // original spawn rate 
+        //int difficulty = Math.Clamp((int)(totalTime / 3f), 1, 3);       // slower spawn rate 
 
         int currentCount = asteroids.Count;
 

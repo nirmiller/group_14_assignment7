@@ -46,7 +46,6 @@ public class Spaceship
         // ship
         _ship = spaceshipTexture;
         _position = new Vector2(_screenWidth / 2, _screenHeight / 2);
-        //_direction = direction;     
         _shipSpeed = shipSpeed;
         _shipVelocity = VeclocityDirection(_direction, _shipSpeed);
 
@@ -98,36 +97,43 @@ public class Spaceship
             offset.X * sin + offset.Y * cos);
     }
 
-    // traveling 
-    private void Traveling(GameTime gameTime)
+    // traveling and turning 
+    private void Turning(KeyboardState keys, GameTime gameTime)
     {
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        _position += _shipVelocity * dt;
-        
-        // wrap horizontally 
-        if (_position.X < 0)              _position.X = _screenWidth;
-        if (_position.X > _screenWidth)   _position.X = 0;
 
-        // wrap vertically 
-        if (_position.Y < 0)              _position.Y = _screenHeight;
-        if (_position.Y > _screenHeight)  _position.Y = 0;
-    }
+        bool w = keys.IsKeyDown(Keys.W);
+        bool a = keys.IsKeyDown(Keys.A);
+        bool s = keys.IsKeyDown(Keys.S);
+        bool d = keys.IsKeyDown(Keys.D);
 
-    private void Turning(KeyboardState keys)
-    {
-        bool leftPressed  = (keys.IsKeyDown(Keys.Left)  || keys.IsKeyDown(Keys.A))
-                            && (!_prevKeyState.IsKeyDown(Keys.Left) && !_prevKeyState.IsKeyDown(Keys.A));
-        
-        bool rightPressed = (keys.IsKeyDown(Keys.Right) || keys.IsKeyDown(Keys.D)) 
-                            && (!_prevKeyState.IsKeyDown(Keys.Right) && !_prevKeyState.IsKeyDown(Keys.D));
-        
-        if (leftPressed)
-            _direction = _direction == 1 ? 4 : _direction - 1;   
-        else if (rightPressed)
-            _direction = _direction == 4 ? 1 : _direction + 1;   
+        bool wPressed = w && !_prevKeyState.IsKeyDown(Keys.W);
+        bool aPressed = a && !_prevKeyState.IsKeyDown(Keys.A);
+        bool sPressed = s && !_prevKeyState.IsKeyDown(Keys.S);
+        bool dPressed = d && !_prevKeyState.IsKeyDown(Keys.D);
 
-        if (leftPressed || rightPressed)
-            _shipVelocity = VeclocityDirection(_direction, _shipSpeed);
+        // setting direction 
+        if (wPressed) _direction = 1;
+        else if (aPressed) _direction = 4;
+        else if (sPressed) _direction = 3;
+        else if (dPressed) _direction = 2;
+
+        // move if the key for the current direction is held
+        if ((w && _direction == 1) ||
+            (d && _direction == 2) ||
+            (s && _direction == 3) ||
+            (a && _direction == 4))
+        {
+            _position += VeclocityDirection(_direction, _shipSpeed) * dt;
+
+            // wrap horizontally
+            if (_position.X < 0)             _position.X = _screenWidth;
+            if (_position.X > _screenWidth)  _position.X = 0;
+
+            // wrap vertically
+            if (_position.Y < 0)             _position.Y = _screenHeight;
+            if (_position.Y > _screenHeight) _position.Y = 0;
+        }
     }
     
     // shooting
@@ -135,8 +141,8 @@ public class Spaceship
     {
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        Vector2 leftOffset  = new Vector2(-39, -27);
-        Vector2 rightOffset = new Vector2( 39, -27);
+        Vector2 leftOffset  = new Vector2(-26, -30);
+        Vector2 rightOffset = new Vector2( 26, -30);
 
         bool spacePressed = keys.IsKeyDown(Keys.Space)
                             && !_prevKeyState.IsKeyDown(Keys.Space);
@@ -167,8 +173,7 @@ public class Spaceship
         
         KeyboardState keys = Keyboard.GetState();
         
-        Turning(keys);
-        Traveling(gameTime);
+        Turning(keys, gameTime);
         
         Shooting(keys, gameTime);
         
@@ -186,7 +191,7 @@ public class Spaceship
             color: Color.White,
             rotation: DirectionToAngle(_direction),
             origin: new (_ship.Width/2f, _ship.Height/2f),
-            scale: 2f,
+            scale: 1f,
             effects: SpriteEffects.None,
             layerDepth: 0f);
         

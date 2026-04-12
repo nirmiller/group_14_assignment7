@@ -57,7 +57,7 @@ public class Asteroid
         Vector2 v = _endPosition - _startPosition;
         _dir = v.LengthSquared() > 0f ? Vector2.Normalize(v) : Vector2.UnitX;
 
-        _speed = Random.Shared.Next(120, 220);
+        _speed = Random.Shared.Next(50, 100);       // originally (120, 220)
         _velocity = _dir * _speed;
 
         _curveAmount = Random.Shared.Next(20, 60) / 100f;

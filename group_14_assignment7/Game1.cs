@@ -29,7 +29,11 @@ public class Game1 : Game
     private Spaceship _spaceship;
     
     // gui
-
+    private HUD _hud;
+    private SpriteFont _font;
+    private Texture2D _heartFull;
+    private Texture2D _heartEmpty;
+    
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -69,17 +73,21 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // ship 
-        _ship = Content.Load<Texture2D>("imgs/rocket");
+        _ship = Content.Load<Texture2D>("imgs/largerRocket");
         _shot = Content.Load<Texture2D>("imgs/shot");
         _spaceship = new Spaceship(screenWidth: _screenWidth,
             screenHeight: _screenHeight,
             spaceshipTexture: _ship,
-            shipSpeed: 100f,
+            shipSpeed: 150f,
             shot: _shot,
-            shotSpeed: 150f);
+            shotSpeed: 250f);
         
         // gui
-
+        _font = Content.Load<SpriteFont>("fonts/Arial"); // make sure you added this in Content
+        _heartFull = Content.Load<Texture2D>("imgs/heart");
+        _heartEmpty = Content.Load<Texture2D>("imgs/missing_heart");
+        
+        _hud = new HUD(_font, _heartFull, _heartEmpty, (int)_screenWidth, (int)_screenHeight);
     }
 
     protected override void Update(GameTime gameTime)
@@ -88,15 +96,10 @@ public class Game1 : Game
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
         
-       
-       
-        
         // ship 
         _spaceship.Update(gameTime);
         
         // astroid
-        
-        
         List<(Vector2 pos, float radius)> collisionPoints = new();
 
         collisionPoints.Add((_spaceship.getPosition(), 40f)); // tweak this
@@ -108,10 +111,11 @@ public class Game1 : Game
             collisionPoints.Add((fireShots[i], 8f)); // tweak this
         }
 
-// pass to asteroid system
+        // pass to asteroid system
         asteroidSpawner.beginAsteroids(gameTime, collisionPoints);
     
         // gui
+        _hud.Update(gameTime);
 
         base.Update(gameTime);
     }
@@ -133,8 +137,8 @@ public class Game1 : Game
         // ship
         _spaceship.Draw(_spriteBatch);
     
-    
         // gui
+        _hud.Draw(_spriteBatch);
 
         base.Draw(gameTime);
     }
