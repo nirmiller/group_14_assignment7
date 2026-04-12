@@ -28,6 +28,10 @@ public class Game1 : Game
     private Spaceship _spaceship;
     
     // gui
+    private HUD _hud;
+    private SpriteFont _font;
+    private Texture2D _heartFull;
+    private Texture2D _heartEmpty;
 
     public Game1()
     {
@@ -78,6 +82,11 @@ public class Game1 : Game
             shotSpeed: 150f);
         
         // gui
+        _font = Content.Load<SpriteFont>("fonts/Arial"); // make sure you added this in Content
+        _heartFull = Content.Load<Texture2D>("imgs/heart");
+        _heartEmpty = Content.Load<Texture2D>("imgs/missing_heart");
+
+        _hud = new HUD(_font, _heartFull, _heartEmpty, (int)_screenWidth, (int)_screenHeight);
 
     }
 
@@ -95,6 +104,7 @@ public class Game1 : Game
 
     
         // gui
+        _hud.Update(gameTime);
 
         base.Update(gameTime);
     }
@@ -118,6 +128,7 @@ public class Game1 : Game
     
     
         // gui
+        _hud.Draw(_spriteBatch);
 
         base.Draw(gameTime);
     }
