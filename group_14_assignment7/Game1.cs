@@ -73,9 +73,9 @@ public class Game1 : Game
         _spaceship = new Spaceship(screenWidth: _screenWidth,
             screenHeight: _screenHeight,
             spaceshipTexture: _ship,
-            shipSpeed: 1f,
+            shipSpeed: 100f,
             shot: _shot,
-            shotSpeed: 2f);
+            shotSpeed: 150f);
         
         // gui
 
@@ -91,7 +91,8 @@ public class Game1 : Game
         asteroidSpawner.beginAsteroids(gameTime);
         
         // ship 
-    
+        _spaceship.Update(gameTime);
+
     
         // gui
 
