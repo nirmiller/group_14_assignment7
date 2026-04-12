@@ -12,22 +12,24 @@ public class Spaceship
     // screen info 
     private float _screenWidth;
     private float _screenHeight;
-    
+
     // ship
     private Texture2D _ship;
-    private Vector2 _position;
-    private float _direction = 1;     // up = 1, right = 2, down = 3, left = 4 
-    private float _shipSpeed;       // speed will be the same in each direction with no acceleration 
-    private Vector2 _shipVelocity;     
+    public Vector2 _position;
+    private float _direction = 1; // up = 1, right = 2, down = 3, left = 4 
+    private float _shipSpeed; // speed will be the same in each direction with no acceleration 
+    private Vector2 _shipVelocity;
     private Boolean _isAlive = true;
-    
+
     // turning 
     private KeyboardState _prevKeyState;
-    
+
     // shot 
     private Texture2D _shot;
     private float _shotSpeed;
     private List<(Vector2 pos, Vector2 vel)> _shots = new();
+
+
 
     public Spaceship(float screenWidth,
         float screenHeight,
@@ -40,18 +42,32 @@ public class Spaceship
         // screen info 
         _screenWidth = screenWidth;
         _screenHeight = screenHeight;
-        
+
         // ship
         _ship = spaceshipTexture;
         _position = new Vector2(_screenWidth / 2, _screenHeight / 2);
         //_direction = direction;     
         _shipSpeed = shipSpeed;
         _shipVelocity = VeclocityDirection(_direction, _shipSpeed);
-        
+
         // shot
         _shot = shot;
         _shotSpeed = shotSpeed;
     }
+
+    public List<Vector2> GetShotPositions()
+    {
+        List<Vector2> positions = new List<Vector2>();
+
+        foreach (var (pos, _) in _shots)
+        {
+            positions.Add(pos);
+        }
+
+        return positions;
+    }
+
+    public Vector2 getPosition() => _position;
     
     // helper- Velocity direction 
     private static Vector2 VeclocityDirection(float direction, float speed) => direction switch
@@ -170,7 +186,7 @@ public class Spaceship
             color: Color.White,
             rotation: DirectionToAngle(_direction),
             origin: new (_ship.Width/2f, _ship.Height/2f),
-            scale: 3f,
+            scale: 2f,
             effects: SpriteEffects.None,
             layerDepth: 0f);
         
@@ -183,7 +199,7 @@ public class Spaceship
                 color: Color.Yellow,
                 rotation: DirectionToAngle(_direction),
                 origin: new Vector2(_shot.Width / 2f, _shot.Height / 2f),
-                scale: 3f,
+                scale: 2f,
                 effects: SpriteEffects.None,
                 layerDepth: 0f);
         }

@@ -33,7 +33,7 @@ public class AsteroidsSpawn
         stopGame = true;
     }
 
-    public void beginAsteroids(GameTime gametime)
+    public void beginAsteroids(GameTime gametime, List<(Vector2 pos, float radius)> collisionPositions)
     {
         if (stopGame)
             return;
@@ -46,7 +46,7 @@ public class AsteroidsSpawn
         for (int i = 0; i < currentCount; i++)
         {
             Asteroid asteroid = asteroids.Dequeue();
-            asteroid.Animate(gametime);
+            asteroid.Animate(gametime, collisionPositions);
 
             if (asteroid.isAlive)
             {

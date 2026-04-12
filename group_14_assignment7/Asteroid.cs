@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace group_14_assignment7;
 
 using System;
@@ -62,7 +64,7 @@ public class Asteroid
         _curveFrequency = Random.Shared.Next(10, 20) / 10f;
 
         _bodyRotation = (float)Math.Atan2(_dir.Y, _dir.X);
-        radius = (_bodyTexture.Width * size) / 2f;
+        radius = (_bodyTexture.Width * size) / 4f;
     }
 
     public void ResetAnimation()
@@ -87,12 +89,29 @@ public class Asteroid
         _bodyRotation = (float)Math.Atan2(_dir.Y, _dir.X);
     }
     
-    public bool IsColliding(Vector2 position, float otherRadius)
+    public bool IsColliding(Vector2 otherPosition, float otherRadius)
     {
-        float r = this.radius + otherRadius;
-        return Vector2.DistanceSquared(this._bodyPosition, position) <= r * r;
+        float r = radius + otherRadius;
+        return Vector2.DistanceSquared(_bodyPosition, otherPosition) <= r * r;
     }
 
+    public bool CheckCollisions(List<(Vector2 pos, float radius)> collisionPoints)
+    {
+        if (collisionPoints == null || collisionPoints.Count == 0)
+            return false;
+
+        for (int i = 0; i < collisionPoints.Count; i++)
+        {
+            var (pos, otherRadius) = collisionPoints[i];
+
+            if (IsColliding(pos, otherRadius))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
     public void SetPath(Vector2 start, Vector2 end, bool useRandomTrajectory)
     {
         _startPosition = start;
@@ -101,8 +120,10 @@ public class Asteroid
         _useRandomTrajectory = useRandomTrajectory;
         ResetAnimation();
     }
+    
+    
 
-    public void Animate(GameTime gameTime)
+    public void Animate(GameTime gameTime, List<(Vector2 pos, float radius)> collisionPoints)
     {
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         _t += dt;
@@ -112,6 +133,12 @@ public class Asteroid
         _spin += dt * 3f;
 
         Vector2 moveDir = _dir;
+
+        if (isAlive && CheckCollisions(collisionPoints))
+        {
+            isAlive = false;
+            return;
+        }
 
         if (_useRandomTrajectory)
         {
