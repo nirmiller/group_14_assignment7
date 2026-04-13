@@ -112,8 +112,14 @@ public class Game1 : Game
         }
 
         // pass to asteroid system
-        asteroidSpawner.beginAsteroids(gameTime, collisionPoints);
-    
+        bool shipHit = asteroidSpawner.beginAsteroids(gameTime, collisionPoints);
+        
+        if (shipHit)
+        {
+            _spaceship.Reset();
+            asteroidSpawner.ResetAll();
+        }
+        
         // gui
         _hud.Update(gameTime);
 

@@ -32,21 +32,27 @@ public class AsteroidsSpawn
     {
         stopGame = true;
     }
-
-    public void beginAsteroids(GameTime gametime, List<(Vector2 pos, float radius)> collisionPositions)
+    public bool beginAsteroids(GameTime gametime, List<(Vector2 pos, float radius)> collisionPositions)
     {
         if (stopGame)
-            return;
+            return false;      
 
         totalTime += (float)gametime.ElapsedGameTime.TotalSeconds;
         int difficulty = Math.Clamp((int)totalTime, 1, 7);        // original spawn rate 
         //int difficulty = Math.Clamp((int)(totalTime / 3f), 1, 3);       // slower spawn rate 
-
+        
+        bool shipWasHit = false;        
         int currentCount = asteroids.Count;
 
         for (int i = 0; i < currentCount; i++)
         {
             Asteroid asteroid = asteroids.Dequeue();
+            
+            if (asteroid.IsColliding(collisionPositions[0].pos, collisionPositions[0].radius))
+            {
+                shipWasHit = true;
+            }
+            
             asteroid.Animate(gametime, collisionPositions);
 
             if (asteroid.isAlive)
@@ -59,6 +65,8 @@ public class AsteroidsSpawn
         {
             spawnRandom(difficulty);
         }
+
+        return shipWasHit;     
     }
 
     public void DrawAsteroids(SpriteBatch spriteBatch)

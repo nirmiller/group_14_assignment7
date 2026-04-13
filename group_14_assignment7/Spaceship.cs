@@ -28,9 +28,7 @@ public class Spaceship
     private Texture2D _shot;
     private float _shotSpeed;
     private List<(Vector2 pos, Vector2 vel)> _shots = new();
-
-
-
+    
     public Spaceship(float screenWidth,
         float screenHeight,
         Texture2D spaceshipTexture,
@@ -166,6 +164,22 @@ public class Spaceship
                 _shots[i] = (pos, vel);
         }
     }
+
+    public void Kill()
+    {
+        _isAlive = false;
+    }
+
+    public void Reset()
+    {
+        _isAlive = true;
+        _position = new Vector2(_screenWidth / 2, _screenHeight / 2);
+        _direction = 1;
+        _shipVelocity = VeclocityDirection(_direction, _shipSpeed);
+        _shots.Clear();
+    }
+
+    public bool IsAlive() => _isAlive;
 
     public void Update(GameTime gameTime)
     {
