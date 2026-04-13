@@ -15,6 +15,8 @@ public class HUD
 
     private float _timeAccumulator;
     private float _scale = 0.15f;
+    
+    private bool _justReset;
 
     private enum GameState
     {
@@ -45,6 +47,18 @@ public class HUD
         _score = 0;
         _timeAccumulator = 0f;
         _currentState = GameState.Playing;
+
+        _justReset = true; 
+    }
+    
+    public bool ConsumeResetFlag()
+    {
+        if (_justReset)
+        {
+            _justReset = false;
+            return true;
+        }
+        return false;
     }
 
     public void AddScore(int amount)
@@ -170,5 +184,10 @@ public class HUD
         spriteBatch.DrawString(_font, gameOverText, center - new Vector2(goSize.X / 2, 100), Color.White);
         spriteBatch.DrawString(_font, scoreText, center - new Vector2(scoreSize.X / 2, 20), Color.White);
         spriteBatch.DrawString(_font, restartText, center - new Vector2(restartSize.X / 2, -60), Color.White);
+    }
+    
+    public bool IsGameOver()
+    {
+        return _currentState == GameState.GameOver;
     }
 }

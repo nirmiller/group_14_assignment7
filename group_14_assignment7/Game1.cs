@@ -18,7 +18,7 @@ public class Game1 : Game
     private float _screenWidth = 1000;
     private float _screenHeight = 800;
     
-    // astroids 
+    // asteroids 
     private AsteroidsSpawn asteroidSpawner;
     Texture2D[] asteroidBodies;
     Texture2D[] asteroidTails;
@@ -56,7 +56,7 @@ public class Game1 : Game
         // background
         _background = Content.Load<Texture2D>("imgs/background");
         
-        // astroids 
+        // asteroids 
         asteroidBodies = new Texture2D[]
         {
             Content.Load<Texture2D>("imgs/meteor_body"),
@@ -99,29 +99,59 @@ public class Game1 : Game
         // ship 
         _spaceship.Update(gameTime);
         
-        // astroid
+        // asteroid
         List<(Vector2 pos, float radius)> collisionPoints = new();
 
         collisionPoints.Add((_spaceship.getPosition(), 40f)); // tweak this
 
         List<Vector2> fireShots = _spaceship.GetShotPositions();
+        var asteroids = asteroidSpawner.GetAsteroids();
+
+        for (int i = fireShots.Count - 1; i >= 0; i--)
+        {
+            Vector2 shotPos = fireShots[i];
+
+            foreach (var asteroid in asteroids)
+            {
+                if (!asteroid.isAlive) continue;
+
+                if (asteroid.IsColliding(shotPos, 4f)) // same radius you used
+                {
+                    asteroid.Kill();                 // destroy asteroid
+                    _spaceship.RemoveShotAt(i);      // remove shot
+                    _hud.AddScore(3);                // add score
+
+                    break; // prevents collateral hits
+                }
+            }
+        }
 
         for (int i = 0; i < fireShots.Count; i++)
         {
-            collisionPoints.Add((fireShots[i], 8f)); // tweak this
+            collisionPoints.Add((fireShots[i], 8f)); 
         }
 
         // pass to asteroid system
-        bool shipHit = asteroidSpawner.beginAsteroids(gameTime, collisionPoints);
+        var (shipHit, kills) = asteroidSpawner.beginAsteroids(gameTime, collisionPoints);
         
         if (shipHit)
         {
-            _spaceship.Reset();
-            asteroidSpawner.ResetAll();
+            _hud.LoseLife();
+
+            if (!_hud.IsGameOver())
+            {
+                _spaceship.Reset();
+                asteroidSpawner.ResetAll();
+            }
         }
         
         // gui
         _hud.Update(gameTime);
+        if (_hud.ConsumeResetFlag())
+        {
+            _spaceship.Reset();
+            asteroidSpawner.ResetAll();
+        }
 
         base.Update(gameTime);
     }
@@ -137,7 +167,7 @@ public class Game1 : Game
             Color.White);
         _spriteBatch.End();
         
-        // astroid 
+        // asteroid 
         asteroidSpawner.DrawAsteroids(_spriteBatch);
         
         // ship

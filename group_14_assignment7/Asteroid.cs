@@ -64,7 +64,7 @@ public class Asteroid
         _curveFrequency = Random.Shared.Next(10, 20) / 10f;
 
         _bodyRotation = (float)Math.Atan2(_dir.Y, _dir.X);
-        radius = (_bodyTexture.Width * size) / 4f;
+        radius = (_bodyTexture.Width * _size) * 0.3f;
     }
 
     public void ResetAnimation()
@@ -134,7 +134,9 @@ public class Asteroid
 
         Vector2 moveDir = _dir;
 
-        if (isAlive && CheckCollisions(collisionPoints))
+        // ONLY check first collision point (the ship)
+        if (isAlive && collisionPoints.Count > 0 &&
+            IsColliding(collisionPoints[0].pos, collisionPoints[0].radius))
         {
             isAlive = false;
             return;
@@ -208,7 +210,10 @@ public class Asteroid
         spriteBatch.Draw(_bodyTexture, Vector2.Zero, Color.White);
         spriteBatch.End();
     }
-
-
+    
+    public void Kill()
+    {
+        isAlive = false;
+    }
     
 }

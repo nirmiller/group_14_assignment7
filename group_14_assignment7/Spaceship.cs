@@ -225,4 +225,10 @@ public class Spaceship
         
         spriteBatch.End();
     }
+    
+    public void RemoveShotAt(int index)
+    {
+        if (index >= 0 && index < _shots.Count)
+            _shots.RemoveAt(index);
+    }
 }
