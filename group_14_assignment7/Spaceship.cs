@@ -23,6 +23,8 @@ public class Spaceship
 
     // turning 
     private KeyboardState _prevKeyState;
+    
+    private ShotTimer _shotTimer;
 
     // shot 
     private Texture2D _shot;
@@ -50,6 +52,10 @@ public class Spaceship
         // shot
         _shot = shot;
         _shotSpeed = shotSpeed;
+
+        float _shotDelay = 1.0f; // in seconds
+        
+        _shotTimer = new ShotTimer(_shotDelay);
     }
 
     public List<Vector2> GetShotPositions()
@@ -138,17 +144,20 @@ public class Spaceship
     private void Shooting(KeyboardState keys, GameTime gameTime)
     {
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        
+        _shotTimer.Update(gameTime);
 
         Vector2 leftOffset  = new Vector2(-26, -30);
         Vector2 rightOffset = new Vector2( 26, -30);
 
         bool spacePressed = keys.IsKeyDown(Keys.Space)
                             && !_prevKeyState.IsKeyDown(Keys.Space);
-        if (spacePressed)
+        if (spacePressed && !_shotTimer.isTriggered())
         {
             Vector2 vel = VeclocityDirection(_direction, _shotSpeed);
             _shots.Add((_position + ShotOffset(leftOffset),  vel));
             _shots.Add((_position + ShotOffset(rightOffset), vel));
+            _shotTimer.Start();
         }
 
         for (int i = _shots.Count - 1; i >= 0; i--)
