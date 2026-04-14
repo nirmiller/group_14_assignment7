@@ -1,0 +1,37 @@
+Game Functionality: 
+    - Use WASD keys to move around screen
+    - Use space bar to shoot 
+    - If hit by astroid player is killed 
+    
+Rules of Play:
+    - Don't get hit by astroid 
+    - Shoot astroids to avoid being killed 
+    
+Win and Lose Conditions: 
+    - There is not a strict win conditions, wining is more so based on time alive. 
+    - You lose if the astroid hits you and you are on your third life.  
+    
+Classes 
+    - Astroid.cs (Nir) 
+        - Astroid movement and rotation
+        - Collision detection
+        - Astroid's life time
+    - AstroidSpawn.cs (Nir) 
+        - Difficulty scale 
+        - Each frame, every asteroid is dequeued, updated via Animate(), and re-enqueued only if still alive — dead 
+        ones are counted as kills and discarded.
+        - collision reporting 
+        - randomly spawns new astroids off screen 
+        - resets astroids and timer 
+    - HUD.cs (Chris) 
+        - Tracks if game is active or over
+        - Increments score by 1 every second 
+        - Tracks and updates the lives left 
+        - Game over screen
+    - ShotTimer.cs (Nir) 
+        - 
+    - Spaceship.cs (Meagan)
+        - Movement and rotation of the ship 
+        - Shooting 
+        - Tracks if ship is alive and resets is when needed  
+ 

@@ -1,0 +1,13 @@
+Goal: 
+    - Survive without getting hit as long as possible. 
+        - If you get hit by astroid it will reset (you have a total of 3 lives) 
+        - Shoot as many astroids to protect yourself 
+    
+
+Playing: 
+    - Game will immediately start when it is opened. 
+    - Tapping WASD will turn you in the corresponding directions, and if you press and hold it will travel in the 
+    corresponding direction. 
+    - Pressing space bar will shoot the shots 
+    - If killed by astroid, you will respawn in the center and loose a life, if you are out of lives the game is over 
+    and you can start another round by pressing P
